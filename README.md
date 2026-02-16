@@ -42,9 +42,9 @@ Therefore, it is important to note that the webapp locally can only run when the
 
 3. Once in session, enter:
     ```
-    wget -----
-    unzip ---.zip
-    cd YOUR_FOLDER
+    wget https://github.com/TheDarkKnight2622/Bitcatalyst-version-1/archive/refs/heads/main.zip
+    unzip main.zip
+    cd Bitcatalyst-version-1-main
     flask run
     ```
 4. You should see a pop-up notifying that the webapp is running on a specific port. Click on the link, and you are good to go!
@@ -58,9 +58,11 @@ Therefore, it is important to note that the webapp locally can only run when the
 
 2. Type the following in the terminal of your IDE:
     ```
-    wget -----
-    unzip ---.zip
-    cd YOUR_FOLDER
+    wget https://github.com/TheDarkKnight2622/Bitcatalyst-version-1/archive/refs/heads/main.zip
+    unzip main.zip
+    cd Bitcatalyst-version-1-main
+    python3 -m venv venv
+    venv\Scripts\activate
     pip install flask cs50
     flask run
 

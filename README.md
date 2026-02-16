@@ -41,12 +41,12 @@ Therefore, it is important to note that the webapp locally can only run when the
 2. Log in to your dedicated codespace with your github account.
 
 3. Once in session, enter:
-    '''
+    ```
     wget -----
     unzip ---.zip
     cd YOUR_FOLDER
     flask run
-    '''
+    ```
 4. You should see a pop-up notifying that the webapp is running on a specific port. Click on the link, and you are good to go!
 
 5. This project is open-source, so please feel free to clone and modify the code as you wish.
@@ -57,14 +57,14 @@ Therefore, it is important to note that the webapp locally can only run when the
 1. Ensure that you have installed python.
 
 2. Type the following in the terminal of your IDE:
-    '''
+    ```
     wget -----
     unzip ---.zip
     cd YOUR_FOLDER
     pip install flask cs50
     flask run
 
-    '''
+   ```
 3. Assuming you have connected to a serviceable port, the webapp should now be accessible through the link tied to the port,
 
 4. There you have it! You may now proceed to explore BitCatalyst.

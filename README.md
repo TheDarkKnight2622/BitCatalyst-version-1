@@ -47,10 +47,11 @@ Therefore, it is important to note that the webapp locally can only run when the
     cd Bitcatalyst-version-1-main
     flask run
     ```
-4. You should see a pop-up notifying that the webapp is running on a specific port. Click on the link, and you are good to go!
+4. Move the html pages to a folder named 'templates'. Repeat the process with the styles.css file and images, by moving them to a folder named 'static'
 
-5. This project is open-source, so please feel free to clone and modify the code as you wish.
+5. You should see a pop-up notifying that the webapp is running on a specific port. Click on the link, and you are good to go!
 
+6. This project is open-source, so please feel free to clone and modify the code as you wish.
 
 **For those running the program locally**:
 
@@ -67,10 +68,12 @@ Therefore, it is important to note that the webapp locally can only run when the
     flask run
 
    ```
-3. Assuming you have connected to a serviceable port, the webapp should now be accessible through the link tied to the port,
+3. Move the html pages to a folder named 'templates'. Repeat the process with the styles.css file and all images, by moving them to a folder named 'static'.
 
-4. There you have it! You may now proceed to explore BitCatalyst.
+4. Assuming you have connected to a serviceable port, the webapp should now be accessible through the link tied to the port,
 
+5. There you have it! You may now proceed to explore BitCatalyst.
+   
 ### Future plans and miscellaneous information:
 
 **Some pages that are in the webapp but not highlighted**:

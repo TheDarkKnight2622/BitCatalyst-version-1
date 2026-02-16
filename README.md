@@ -21,8 +21,8 @@ Then we have **BitCatalyst**! A one-stop solution for inexperienced traders to t
 - A obtained from a TradingView API is also available in both the **/index** and /trade pages for users to make a more informed decision.
 
 - The /index page would display a table of all the trades that are open, with live PnL (Profit & Loss).
-    > [!NOTE]
-    > You are allowed to hedge by opening a short and long position for any coin at the same time.
+> [!NOTE]
+> You are allowed to hedge by opening a short and long position for any coin at the same time.
 
 - Then comes the **/analyse** page. Once you have closed your positions, they would appear here. A detailed breakdown of each of your trade, your average PnL and Win Rate, and other metrics such as your top coins are available here for your perusal! Basic, but effective for those starting off.
 

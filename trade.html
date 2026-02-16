@@ -1,0 +1,272 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Trade
+{% endblock %}
+
+{% block main %}
+
+<section class="trade1 mb-4">
+  <div class="row">
+     <!-- Main chart, adapted from Tradingview API -->
+    <div class="col-lg-8 mb-3">
+      <div class="tradingview-widget-container" style="height:100%; width:100%">
+        <div class="tradingview-widget-container__widget" style="height:400px; width:100%"></div>
+        <div class="tradingview-widget-copyright">
+          <a href="https://www.tradingview.com/symbols/BTCUSD/?exchange=COINBASE"
+             rel="noopener nofollow" target="_blank">
+            <span class="blue-text">Bitcoin price</span>
+          </a>
+          <span class="trademark"> by TradingView</span>
+        </div>
+        <script type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
+                async>
+        {
+          "allow_symbol_change": true,
+          "calendar": false,
+          "details": false,
+          "hide_side_toolbar": true,
+          "hide_top_toolbar": false,
+          "hide_legend": false,
+          "hide_volume": false,
+          "hotlist": false,
+          "interval": "D",
+          "locale": "en",
+          "save_image": true,
+          "style": "1",
+          "symbol": "COINBASE:BTCUSD",
+          "theme": "dark",
+          "timezone": "Etc/UTC",
+          "backgroundColor": "#ffffff",
+          "gridColor": "rgba(46, 46, 46, 0.06)",
+          "watchlist": [],
+          "withdateranges": false,
+          "compareSymbols": [],
+          "studies": [],
+          "autosize": true
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- Widget for the selected live coin prices, also adapted from Tradingview-->
+    <div class="col-lg-4 mb-3">
+      <div class="tradingview-widget-container" style="width:100%">
+        <div class="tradingview-widget-container__widget" style="height:400px; width:100%"></div>
+        <div class="tradingview-widget-copyright">
+          <a href="https://www.tradingview.com/markets/"
+             rel="noopener nofollow" target="_blank">
+            <span class="blue-text">World markets</span>
+          </a> by TradingView
+        </div>
+        <script type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js"
+                async>
+        {
+          "lineWidth": 2,
+          "lineType": 0,
+          "chartType": "area",
+          "fontColor": "rgb(106, 109, 120)",
+          "gridLineColor": "rgba(46, 46, 46, 0.06)",
+          "volumeUpColor": "rgba(34, 171, 148, 0.5)",
+          "volumeDownColor": "rgba(247, 82, 95, 0.5)",
+          "backgroundColor": "#ffffff",
+          "widgetFontColor": "#0F0F0F",
+          "upColor": "#22ab94",
+          "downColor": "#f7525f",
+          "borderUpColor": "#22ab94",
+          "borderDownColor": "#f7525f",
+          "wickUpColor": "#22ab94",
+          "wickDownColor": "#f7525f",
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "locale": "en",
+          "chartOnly": false,
+          "scalePosition": "right",
+          "scaleMode": "Normal",
+          "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+          "valuesTracking": "1",
+          "changeMode": "price-and-percent",
+          "symbols": [
+            ["BITSTAMP:BTCUSD|ALL"],
+            ["BINANCE:ETHUSD|ALL"],
+            ["COINBASE:SOLUSD|1D"],
+            ["BINANCE:XRPUSD|ALL"],
+            ["BINANCE:DOGEUSD|ALL"]
+          ],
+          "dateRanges": [
+            "1d|1",
+            "1m|30",
+            "3m|60",
+            "12m|1D",
+            "60m|1W",
+            "all|1M"
+          ],
+          "fontSize": "10",
+          "headerFontSize": "medium",
+          "autosize": true,
+          "width": "100%",
+          "height": "100%",
+          "noTimeScale": false,
+          "hideDateRanges": false,
+          "hideMarketStatus": false,
+          "hideSymbolLogo": false
+        }
+        </script>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trade2">
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <h2 class="h4 mb-3">Make a Trade</h2>
+       <!-- Form to open trades -->
+      <form action="/trade" method="POST">
+        <div class="mb-3">
+          <label for="symbol" class="form-label"><b>Choose a Coin</b></label>
+          <select id="symbol" name="symbol" class="form-select mx-auto w-auto">
+            <option disabled selected value="">Coin</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="direction" class="form-label"><b>Type</b></label>
+          <select id="direction" name="direction" class="form-select mx-auto w-auto">
+            <option disabled selected value="">Direction</option>
+            <option value="LONG">Long</option>
+            <option value="SHORT">Short</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="position" class="form-label"><b>Position size</b></label>
+          <input
+            autocomplete="off"
+            class="form-control mx-auto w-auto"
+            id="position"
+            name="position"
+            placeholder="Size (number of coins)"
+            type="number"
+            min="0"
+            step="any">
+        </div>
+
+        <div class="mb-3">
+          <span class="value"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Enter</button>
+      </form>
+    </div>
+
+    <!-- Live prices for all coins displayed in text on the right side of the page -->
+    <div class="col-md-6">
+      <div id="price-track" class="mt-4 mt-md-0">
+        <p><span class="coin-name fw-semibold">Current BTCUSDC price: </span><span id="btc-price"></span></p>
+        <p><span class="coin-name fw-semibold">Current ETHUSDC price: </span><span id="eth-price"></span></p>
+        <p><span class="coin-name fw-semibold">Current SOLUSDC price: </span><span id="sol-price"></span></p>
+        <p><span class="coin-name fw-semibold">Current DOGEUSDC price: </span><span id="doge-price"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+ <!-- JS script to display the live coin prices, and feed them into the dropdown menu of the form as options-->
+<script>
+  const COINS = [
+    { label: "Bitcoin",  symbol: "BTCUSDC", elementId: "btc-price" },
+    { label: "Ethereum", symbol: "ETHUSDC", elementId: "eth-price" },
+    { label: "Solana",   symbol: "SOLUSDC", elementId: "sol-price" },
+    { label: "Dogecoin", symbol: "DOGEUSDC", elementId: "doge-price" },
+  ];
+
+  async function fetchPrice(symbol) {
+    const url = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    return parseFloat(data.price);
+  }
+
+  // 2) Update the "Current XYZ price" spans
+  async function updateAllPrices() {
+    for (const coin of COINS) {
+      const element = document.getElementById(coin.elementId);
+      if (!element) continue;
+
+      try {
+        const price = await fetchPrice(coin.symbol);
+        element.textContent = `$${price.toFixed(2)}`;
+      } catch (err) {
+        console.error(`Error fetching ${coin.symbol}:`, err);
+        element.textContent = "N/A";
+      }
+    }
+  }
+
+
+  updateAllPrices();
+  setInterval(updateAllPrices, 10000);
+
+
+  const valueSpan = document.querySelector(".value");
+  const positionInput = document.getElementById("position");
+  const symbolSelect = document.getElementById("symbol");
+
+  async function updatePositionValue() {
+    const size = parseFloat(positionInput.value);
+    const chosenSymbol = symbolSelect.value;
+
+    if (!size || !chosenSymbol) {
+      valueSpan.innerText = "";
+      return;
+    }
+
+
+    const coinCfg = COINS.find(c => c.symbol === chosenSymbol);
+    if (!coinCfg) {
+      // if your DB symbols differ, you can map them here instead
+      valueSpan.innerText = "";
+      return;
+    }
+
+    try {
+      const price = await fetchPrice(coinCfg.symbol);
+      const value = size * price;
+      valueSpan.innerText = `Estimated position value: $${value.toFixed(2)}`;
+      valueSpan.style.color = 'white';
+    } catch (err) {
+      console.error("Error computing position value:", err);
+      valueSpan.textContent = "Value: N/A";
+    }
+  }
+
+  positionInput.addEventListener("input", updatePositionValue);
+  symbolSelect.addEventListener("change", updatePositionValue);
+
+  function populateSymbolSelect() {
+  const select = document.getElementById("symbol");
+  if (!select) return;
+
+  COINS.forEach(coin => {
+    const opt = document.createElement("option");
+
+    // what gets submitted to Flask:
+    opt.value = coin.symbol;
+
+    // what the user sees in the dropdown:
+    opt.textContent = `${coin.label} (${coin.symbol})`;
+
+    select.appendChild(opt);
+    });
+  }
+  populateSymbolSelect();
+
+</script>
+
+{% endblock %}

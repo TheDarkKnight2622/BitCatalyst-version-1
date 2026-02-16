@@ -1,0 +1,236 @@
+/* Styles sheet. Guided by AI on how the page can be more aesthetic, while learning some CSS properties that I was originally not too familiar with. */
+
+/* Journal */
+
+.journal-page {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.journal-header {
+    margin-bottom: 1.5rem;
+}
+
+.journal-title {
+    font-size: clamp(2rem, 3vw, 2.4rem);
+    font-weight: 700;
+}
+
+.journal-subtitle {
+    color: #9ca3af;
+    max-width: 600px;
+}
+
+
+.journal-entries-card,
+.journal-page .card {
+    background: #050816;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.journal-page .card-header {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+
+.journal-entries-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+
+.journal-entry-date {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+
+.journal-entry {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;/
+}
+
+.journal-entry-body {
+    margin-top: 0.25rem;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+.journal-entry-body p {
+    margin-bottom: 0.25rem;
+}
+
+
+.journal-divider {
+    margin: 0.25rem 0 0.5rem 0;
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+
+@media (max-width: 768px) {
+    .journal-entries-list {
+        max-height: none;
+    }
+}
+
+/* Main theme */
+
+:root {
+    --bg: #0b0f14;
+    --panel: #111820;
+    --panel-2: #0f141b;
+    --text: #e6edf6;
+    --muted: rgba(230, 237, 246, 0.65);
+    --border: rgba(255, 255, 255, 0.08);
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Page background color and properties */
+body {
+    background: linear-gradient(180deg, #0b0f14 0%, #0d1218 40%, #0b0f14 100%);
+    color: var(--text);
+}
+
+main.container {
+    max-width: 1100px;
+}
+
+/* Navbar */
+.navbar {
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar-brand {
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--border);
+}
+
+/* Cards */
+
+.card {
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow);
+    border-radius: 16px;
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    color: rgba(255, 255, 255, 0.85);
+    border-color: var(--border) !important;
+}
+
+.table td,
+.table th {
+    border-color: var(--border) !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-bg-type: rgba(255, 255, 255, 0.02);
+}
+
+/* Landing page (hero, about section) */
+
+#hero {
+    padding: 18px 0;
+}
+
+.intro-text h1 {
+    line-height: 0.95;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    margin: 0;
+}
+
+
+.change {
+    color: #4da3ff;
+}
+
+
+.brief h3 {
+    font-weight: 500;
+}
+
+#landing-btn {
+    border-radius: 999px;
+    padding: 12px 22px;
+}
+
+#about {
+    border-top: 1px;
+    padding-top: 28px;
+}
+
+.tradingview-card .tradingview-widget-container {
+    margin: 0 auto;
+}
+
+.tradingview-card .tradingview-widget-container {
+    width: min(920px, 100%) !important;
+}
+
+.tradingview-card .tradingview-widget-copyright {
+    opacity: 0.7;
+    font-size: 0.9rem;
+    margin-top: 6px;
+}
+
+.close-btn {
+    border-radius: 10px;
+}
+
+/* Forms */
+
+.form-control,
+select {
+    border-radius: 12px !important;
+    border: 1px;
+}
+
+
+.btn {
+    border-radius: 12px;
+}
+
+
+body {
+    background: #000 !important;
+}
+
+
+.tradingview-widget-container {
+    overflow: visible !important;
+}
+
+.trade1 .tradingview-widget-container__widget {
+    min-height: 420px;
+}
+
+
+.trade1 .col-lg-4 .tradingview-widget-container__widget {
+    min-height: 420px;
+}
+
+
+.tradingview-widget-copyright {
+    margin-top: 6px;
+    opacity: 0.75;
+    font-size: 0.9rem;
+}

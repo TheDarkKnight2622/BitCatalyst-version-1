@@ -1,0 +1,178 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Analyse
+{% endblock %}
+
+{% block main %}
+<!-- Bootstrap flex boxes utilised to display the various metrics -->
+    <div class="container-xl">
+
+        <div class="d-flex flex-row justify-content-center align-items-end mb-3">
+            <div class="text-start">
+                <h2 class="mb-1">Analyse</h2>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row justify-content-center align-items-end mb-3">
+            <div class="text-bottom">
+                <p class="text-secondary mb-0">Trades and Statistics</h2>
+            </div>
+        </div>
+
+
+        <section class="analyse1">
+            <div class="container-xl px-0">
+
+            <!-- Average PnL box-->
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="card bg-dark text-light border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="text-secondary small">Average PnL</div>
+                                <div class="fs-4 fw-bold">{{ "%.2f"|format(avg or 0) }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Win rate box -->
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="card bg-dark text-light border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="text-secondary small">Win rate</div>
+                                <div class="fs-4 fw-bold">{{ "%.1f"|format(rate or 0) }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- PnL line chart to repressent the change over time (daily chart) -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12">
+                        <div class="card bg-dark text-light border-0 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">PnL over time</h5>
+                                <small class="text-secondary">Daily totals</small>
+                            </div>
+                            <div class="card-body p-2">
+                                <div style="height:260px;">
+                                    <canvas id="pnlChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- Table of transactions -->
+                <div class="row g-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="card bg-dark text-light border-0 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Trade History</h5>
+                                <small class="text-secondary">Newest first</small>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Symbol</th>
+                                                <th>Type</th>
+                                                <th>Size</th>
+                                                <th>PnL</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for ptn in ptns %}
+                                                <tr>
+                                                    <td class="fw-semibold">{{ ptn['symbol'] }}</td>
+                                                    <td>{{ ptn['direction'] }}</td>
+                                                    <td>{{ ptn['size'] }}</td>
+                                                    <td class="{% if (ptn['pnl'] or 0) >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                                        {{ "%.2f"|format(ptn['pnl'] or 0) }}
+                                                    </td>
+                                                    <td class="text-secondary">{{ ptn['timestamp'] }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Top coins by PnL -->
+                    <div class="col-12 col-lg-4">
+                        <div class="card bg-dark text-light border-0 shadow-sm h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Top Coins</h5>
+                                <small class="text-secondary">by Total PnL</small>
+                            </div>
+                            <div class="card-body">
+                                {% if top_coins and top_coins|length > 0 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-sm align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Coin</th>
+                                                    <th class="text-end">Trades</th>
+                                                    <th class="text-end">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for c in top_coins %}
+                                                    <tr>
+                                                        <td class="fw-semibold">{{ c['symbol'] }}</td>
+                                                        <td class="text-end text-secondary">{{ c['trades'] }}</td>
+                                                        <td class="text-end {% if (c['total_pnl'] or 0) >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                                            {{ "%.2f"|format(c['total_pnl'] or 0) }}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <p class="text-secondary mb-0">No trades yet.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+<!-- Script for chart.js. Written with the assistance of AI.  -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+    const labels = {{ labels | tojson }};
+    const values = {{ values | tojson }};
+
+    console.log("labels:", labels);
+    console.log("values:", values);
+    console.log("Chart:", typeof Chart);
+
+    const canvas = document.getElementById("pnlChart");
+    if (!canvas) return;
+
+    if (!Array.isArray(labels) || labels.length === 0) {
+        console.warn("No labels -> no chart");
+        return;
+    }
+
+    new Chart(canvas, {
+        type: "line",
+        data: { labels, datasets: [{ data: values, tension: 0.25 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+    });
+    </script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Landing page
+{% endblock %}
+
+{% block main %}
+<!--Inspiration for ladning page/hero component taken from freecodecamp-->
+    <section id="hero" class="row align-items-center mb-5 text-md-start text-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <div class="intro-text">
+                <h1 class="fw-bold">
+                    <span class="feel d-block">Feel</span>
+                    <span class="change d-block">The Change</span>
+                    <span class="today d-block">Today</span>
+                </h1>
+
+                <div class="brief mt-3">
+                    <h3>
+                        <span class="brief1 d-block">Trading Is Hard.</span>
+                        <span class="brief2 d-block text-primary">We Can Help.</span>
+                    </h3>
+                </div>
+
+                <a id="landing-btn" href="#about" class="btn btn-primary btn-lg mt-4">
+                    Learn More
+                </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 text-center">
+            <img alt="Bitcoin rollercoaster" src="{{ url_for('static', filename='Bitcoin-bro.png') }}" class="img-fluid" style="max-height: 320px; object-fit: contain;">
+        </div>
+    </section>
+
+    <section id="about" class="mb-5 text-md-start text-center">
+        <h3 class="fw-bold mb-3">
+            Trading cryptocurrencies has never been better
+        </h3>
+        <p class="lead mb-0">
+            Bitcatalyst is a premier trading platform that gives you the
+            <b>power</b> to master your craft through
+            <b>targeted</b> and <b>bespoke</b> analysis.
+        </p>
+    </section>
+
+{% endblock %}

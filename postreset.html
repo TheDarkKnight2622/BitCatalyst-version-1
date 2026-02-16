@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Set a new password
+{% endblock %}
+ <!-- A form to replace the existing password with a new one-->
+{% block main %}
+    <form action="/postreset" method="POST">
+        <div class="container-1">
+            <div class="mb-3">
+              <label for="username"><b> Enter your Username </b></label>
+              <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text" required>
+            </div>
+            <div class="mb-3">
+              <label for="password"><b> Enter A New Password </b></label>
+              <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="passwrd" placeholder="New Password" type="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmation"><b> Repeat Password </b></label>
+                <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Re-enter Your Password" type="password">
+            </div>
+            <button class="btn btn-primary btn-lg" type="submit">Enter</button>
+        </div>
+    </form>
+{% endblock %}

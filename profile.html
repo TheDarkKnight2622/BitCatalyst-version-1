@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Profile page
+{% endblock %}
+
+{% block main %}
+ <!-- Embedded CSS for the profile page due to complexity. Guided on choices by AI -->
+<style>
+  .profile-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: left;
+  }
+
+  .profile-card {
+    background: #0b0b0b;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.08);
+
+  }
+
+  #right {
+      text-align: center;
+      border-right: 1px solid rgba(0,0,0,0.08);
+      padding-right: 2rem;
+  }
+
+  #left {
+      padding-left: 2rem;
+  }
+
+  #default {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #dee2e6;
+      margin-bottom: 0.75rem;
+  }
+
+  #input-img {
+      display: none;
+  }
+
+  .upload-label {
+      display: inline-block;
+      margin-bottom: 1rem;
+      cursor: pointer;
+  }
+
+  details summary {
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+  }
+
+  details .container {
+      padding-left: 0;
+      margin-bottom: 1rem;
+  }
+</style>
+ <!-- Main profile section with name and picture (modifiable) -->
+<section class="profile-wrapper">
+  <div class="profile-card">
+    <div class="row align-items-start">
+      <div class="col-md-4 d-flex flex-column align-items-center" id="right">
+        <img src="../static/profile.jpg"
+             id="default"
+             alt="Profile picture">
+
+        <label for="input-img" class="btn btn-outline-secondary btn-sm upload-label">
+          Update Picture
+        </label>
+        <input type="file"
+               accept="image/jpeg, image/jpg, image/png"
+               id="input-img">
+
+        <h2 id="name-profile" class="mt-2 mb-0">
+          {{ name }}
+        </h2>
+      </div>
+
+       <!-- Subsequent portion of the page where withdrawals/deposits are made -->
+      <div class="col-md-8 d-flex flex-column gap-3 mt-5" id="left">
+
+        <div class="d-flex flex-row mb-2">
+          <h4 class="mb-1">Account actions</h4>
+          {% if cash is defined %}
+            <p class="text-muted mb-0">
+              Current balance:
+              <strong>{{ cash | usd }}</strong>
+            </p>
+          {% endif %}
+        </div>
+
+        <details id="deposit" open>
+          <summary>Deposit cash</summary>
+          <div class="container">
+            <form method="POST" action="/profile" class="mt-2">
+              <div class="mb-2">
+                <label for="amount1" class="form-label">Enter deposit amount</label>
+                <input autocomplete="off"
+                       class="form-control w-75"
+                       name="amount1"
+                       id="amount1"
+                       placeholder="e.g. 500"
+                       type="text"
+                       required>
+              </div>
+              <button class="btn btn-primary" type="submit">Deposit</button>
+            </form>
+          </div>
+        </details>
+
+        <details id="withdraw">
+          <summary>Withdraw cash</summary>
+          <div class="container">
+            <form method="POST" action="/profile" class="mt-2">
+              <div class="mb-2">
+                <label for="amount2" class="form-label">Enter withdrawal amount</label>
+                <input autocomplete="off"
+                       class="form-control w-75"
+                       name="amount2"
+                       id="amount2"
+                       placeholder="e.g. 250"
+                       type="text"
+                       required>
+              </div>
+              <button class="btn btn-outline-primary" type="submit">Withdraw</button>
+            </form>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </div>
+</section>
+ <!-- JS script to perform the display of the uploaded image -->
+<script>
+  let profilePic = document.getElementById("default");
+  let inputFile = document.getElementById("input-img");
+
+  inputFile.onchange = function () {
+      if (inputFile.files && inputFile.files[0]) {
+          profilePic.src = URL.createObjectURL(inputFile.files[0]);
+      }
+  };
+</script>
+
+{% endblock %}

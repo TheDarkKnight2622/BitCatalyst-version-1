@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log in to an account
+{% endblock %}
+<!-- Simple login page using a form -->
+{% block main %}
+    <form action="/login" method="POST">
+        <div class="container-1">
+            <div class="mb-3">
+                <label for="username"><b> Username </b></label>
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text" required>
+            </div>
+            <div class="mb-3">
+                <label for="password"><b> Password </b></label>
+                <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+            </div>
+            <button class="btn btn-primary btn-lg" type="submit">Login</button>
+        </div>
+        <div class="container-2">
+            <p> Forgot your password? <a href="/reset">Click Here</a>.</p>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Journal
+{% endblock %}
+
+{% block main %}
+    <section id="journal-main" class="journal-page">
+        <div class="journal-header text-start mb-4">
+            <h1 class="journal-title">Trading Journal</h1>
+            <p class="journal-subtitle">
+                Jot down your daily trading experiences through this dedicated page for self-improvement!
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+        <!-- Form with textarea for daily journal submissions -->
+            <div class="col-12 col-lg-5">
+                <div class="card bg-dark text-light shadow-sm border-0">
+                    <div class="card-header">
+                        <h5 class="mb-0">New entry</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="/journal" method="POST" id="j-entry">
+                            <div class="mb-3">
+                                <label for="j-sub" class="form-label">
+                                    Share your thoughts and insights!
+                                </label>
+                                <textarea class="form-control" id="j-sub" name="j-sub" rows="7" placeholder="Example: How did today’s trades go? What did you learn? How did you feel?" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Save
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        <!-- A card to display previous entries for the user's future reference -->
+            <div class="col-12 col-xl-7">
+                <div class="card bg-dark text-light shadow-sm border-0 journal-entries-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Previous entries</h5>
+                        <small class="text-secondary">
+                            Newest first
+                        </small>
+                    </div>
+                    <div class="card-body journal-entries-list">
+
+                        {% if entries %}
+                            {% for entry in entries %}
+                                <article class="journal-entry mb-3">
+                                    <div class="journal-entry-meta">
+                                        <span class="journal-entry-date">
+                                            {{ entry['created_date'] }}
+                                        </span>
+                                    </div>
+                                    <div class="journal-entry-body">
+                                        <p class="mb-0 me-5 ms-0">
+                                            {{ entry['page'] }}
+                                        </p>
+                                    </div>
+                                    <hr class="journal-divider">
+                                </article>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-secondary mb-0">
+                                No entries yet. Write your first one on the left!
+                            </p>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

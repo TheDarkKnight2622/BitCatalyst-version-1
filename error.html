@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Error
+{% endblock %}
+
+{% block main %}
+<!--credit to https://www.vectorstock.com/royalty-free-vector/sad-bitcoin-character-funny-crypto-currency-vector-20214873-->
+    <img class="errorpic" src="../static/bitcoinsad.png" style="border: 10px solid black;">
+    <div class="mb-5">
+        <h4 class="err-caption">{{ message }}, {{ code }}</h4>
+    </div>
+{% endblock %}

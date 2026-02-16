@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+<!--Bootstrap cards used to design layout effectively-->
+    <div class="container-xl index-page">
+    <!-- Tradingview chart API plugin adapted from their website -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-dark text-light shadow-sm border-0 tradingview-card">
+                    <div class="card-header text-center">
+                        <h5 class="mb-0"> LIVE coin prices </h5>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="tradingview-widget-container" style="height: 520px;">
+                            <div class="tradingview-widget-container__widget" style="height: 100%; width: 100%;"></div>
+                            <div class="tradingview-widget-copyright">
+                                <a href="https://www.tradingview.com/symbols/BTCUSD/?exchange=COINBASE" rel="noopener nofollow" target="_blank">
+                                    <span class="blue-text">Bitcatalyst price</span>
+                                </a>
+                                <span class="trademark"> by TradingView</span>
+                            </div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                                {
+                                    "allow_symbol_change": true,
+                                    "calendar": false,
+                                    "details": false,
+                                    "hide_side_toolbar": true,
+                                    "hide_top_toolbar": false,
+                                    "hide_legend": false,
+                                    "hide_volume": false,
+                                    "interval": "D",
+                                    "locale": "en",
+                                    "save_image": true,
+                                    "style": "1",
+                                    "symbol": "COINBASE:BTCUSD",
+                                    "theme": "dark",
+                                    "timezone": "Etc/UTC",
+                                    "backgroundColor": "#ffffff",
+                                    "gridColor": "rgba(46, 46, 46, 0.06)",
+                                    "watchlist": [],
+                                    "withdateranges": false,
+                                    "compareSymbols": [],
+                                    "studies": [],
+                                    "autosize": true
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Table for open positions; live prices obtained from Binance are used to calculate the relevant figures -->
+        <div class="row g-4" id="pnl-live">
+            <div class="col-12 col-lg-8">
+                <div class="card bg-dark text-light shadow-sm border-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Open Positions</h5>
+                        <small class="text-secondary">Live prices via Binance</small>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-dark table-striped align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Coin</th>
+                                    <th>Direction</th>
+                                    <th>Position Size</th>
+                                    <th>Position Value</th>
+                                    <th>PnL</th>
+                                    <th>Close</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for position in holdings %}
+                                    <tr data-symbol="{{ position['symbol'] }}" data-entry="{{ position['price'] }}" data-dir="{{ position['direction'] }}">
+                                        <td class="symb">{{ position['symbol'] }}</td>
+                                        <td class="dir">{{ position['direction'] }}</td>
+                                        <td class="size">{{ position['size'] }}</td>
+                                        <td class="price">--</td>
+                                        <td class="delta">--</td>
+                                        <td>
+                                            <form class="close-form" method="POST" action="/">
+                                                <input type="hidden" name="ident1" value="{{ position['symbol'] }}">
+                                                <input type="hidden" name="ident2" value="{{ position['direction'] }}">
+                                                <input type="hidden" name="ident3" value="{{ position['size'] }}">
+                                                <button class="btn btn-sm btn-danger close-btn" type="submit">
+                                                    Close
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        <!-- A summary card -->
+            <div class="col-12 col-lg-4">
+                <div class="card bg-dark text-light shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="mb-3">Account Overview</h5>
+                            <p class="mb-2"><strong>Positions open:</strong> {{ number }}</p>
+                            <p class="mb-2 total"><strong>Total PnL:</strong> 0.00</p>
+                            <p class="mb-0" id="avalue" data-val="{{ cash }}">
+                                <strong>Account value:</strong> --
+                            </p>
+                        </div>
+                        <small class="text-secondary mt-3">
+                            Updates every 3 seconds
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+<!-- JS script to help display live prices, and perform any neccesary calculations with them -->
+    <script>
+        document.querySelectorAll(".close-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.style.backgroundColor = "green";
+                btn.textContent = "Done!";
+            });
+        });
+
+        async function updateTable() {
+            const rows = document.querySelectorAll("tr[data-symbol]");
+            let tpnl = 0;
+
+            for (const row of rows) {
+                const symbol = row.dataset.symbol;
+                const entry = parseFloat(row.dataset.entry);
+                const dir = row.dataset.dir ? row.dataset.dir.toUpperCase() : "";
+                const size = parseFloat(row.querySelector(".size").innerText);
+
+                if (!symbol || isNaN(entry) || isNaN(size)) {
+                    continue;
+                }
+
+                const url = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`;
+
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    const livePrice = parseFloat(data.price);
+                    if (isNaN(livePrice)) {
+                        continue;
+                    }
+
+                    const positionValue = livePrice * size;
+                    row.querySelector(".price").innerText = `$${positionValue.toFixed(2)}`;
+
+                    let pnl;
+                    if (dir === "LONG") {
+                        pnl = (livePrice - entry) * size;
+                    } else {
+                        pnl = (entry - livePrice) * size;
+                    }
+
+                    tpnl += pnl;
+
+                    const deltaCell = row.querySelector(".delta");
+                    deltaCell.innerText = pnl.toFixed(2);
+                    deltaCell.style.color = pnl >= 0 ? "#00ff00" : "#ff0000";
+
+                } catch (error) {
+                    console.error("Unable to fetch price for", symbol, error);
+                }
+            }
+
+            const totalCell = document.querySelector(".total");
+            const accountValueEl = document.getElementById("avalue");
+
+            if (totalCell) {
+                totalCell.innerText = `Total PnL: ${tpnl.toFixed(2)}`;
+            }
+
+            if (accountValueEl && accountValueEl.dataset.val) {
+                const startingCash = parseFloat(accountValueEl.dataset.val);
+                if (!isNaN(startingCash)) {
+                    const accountValue = startingCash + tpnl;
+                    accountValueEl.innerText = `Account value: ${accountValue.toFixed(2)}`;
+                }
+            }
+        }
+
+    // run now + every 3s
+        updateTable();
+        setInterval(updateTable, 3000);
+    </script>
+
+{% endblock %}

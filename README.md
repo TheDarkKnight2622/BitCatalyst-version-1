@@ -47,7 +47,7 @@ Therefore, it is important to note that the webapp locally can only run when the
     cd Bitcatalyst-version-1-main
     flask run
     ```
-4. Move the html pages to a folder named 'templates'. Repeat the process with the styles.css file and images, by moving them to a folder named 'static'
+4. Move the html pages to a folder named 'templates'. Repeat the process with the styles.css file and images, by moving them to a folder named 'static'.
 
 5. You should see a pop-up notifying that the webapp is running on a specific port. Click on the link, and you are good to go!
 

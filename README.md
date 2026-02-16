@@ -1,5 +1,5 @@
 # BitCatalyst
-### Video Demo:
+### Video Demo: https://youtu.be/Qv4uYpxwxnc
 ### Brief description:
 
 BitCatalyst is a simulated off-chain trading environment where users are able to perform paper trades on a select few cryptocurrencies.
